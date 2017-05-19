@@ -1,0 +1,46 @@
+@font-face {
+    font-family: 'Sansation';
+    font-style: normal;
+    src: url("../fonts/Sansation_Light.ttf");
+}
+
+body {
+    background-color: #ccc;
+    font-family: 'Roboto';
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #5b79cc;
+    font-family: 'Sansation';
+    color: aliceblue;
+    padding: 30px 40px;
+    margin: 0;
+}
+
+.menu {
+    background-color: cornflowerblue;
+    padding: 6px 40px;
+    margin: 0;
+}
+
+.menu li {
+    color: aliceblue;
+    display: table-cell;
+    border-right: 1px solid #AAA;
+    padding: 6px 10px;
+}
+
+.menu li:hover {
+    background-color: rgba(255, 255, 255, 0.13);
+    cursor: pointer;
+}
+
+.menu li:active {
+    background-color: rgba(255, 255, 255, 0.26);
+}
+
+.menu li:first-child {
+    border-left: 1px solid #AAA;
+}
