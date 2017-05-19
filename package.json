@@ -1,0 +1,24 @@
+{
+  "name": "Production",
+  "version": "1.0.0",
+  "description": "Project for learning and practice.",
+  "main": "server.js",
+  "license": "ISC",
+  "engines": {
+    "node": "7.7.2-alpine"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "TCS Sistemas",
+  "repository": {
+    "url": "https://github.com/Lucasrsv1/Production"
+  },
+  "private": false,
+  "dependencies": {
+    "duration-js": "^4.0.0"
+  },
+  "devDependencies": {
+
+  }
+}
