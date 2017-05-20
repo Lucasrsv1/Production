@@ -41,6 +41,6 @@ http.createServer(function (req, res) {
             res.end(data);
         }
     });
-}).listen(3000,/* 'localhost',*/ function () {
+}).listen(3000, function () {
     console.log("Server listening port 3000 [OK]");
 });
