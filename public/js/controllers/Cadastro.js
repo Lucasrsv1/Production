@@ -3,9 +3,7 @@
  */
 
 app.controller('Cadastro', ['$scope', function ($scope) {
-	$scope.maquinas = [];
-	$scope.maquinas.push(new Maquina("Teste", 1, 5));
-	$scope.maquinas.push(new Maquina("Teste 2", 0, 3));
+	$scope.maquinas = maquinas_global;
 	
 	$scope.title = "Nova Máquina";
 	$scope.submit_btn = "Adicionar";
@@ -64,3 +62,6 @@ app.controller('Cadastro', ['$scope', function ($scope) {
 		$scope.$apply();
 	}, 1000);
 }]);
+
+maquinas_global.push(new Maquina("CAF5839673843", 1, 5));
+maquinas_global.push(new Maquina("CAF5839692754", 0, 3));

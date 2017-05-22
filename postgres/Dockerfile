@@ -1,0 +1,4 @@
+FROM postgres:9.6.1
+ENV POSTGRES_USER tcs
+ENV POSTGRES_PASSWORD tcstcs
+ENV POSTGRES_DB production

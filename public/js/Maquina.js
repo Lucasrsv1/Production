@@ -45,6 +45,8 @@ var Maquina = function (nome, status, velocidade_producao) {
 			else if (random < 0.325)
 				maq.velocidade_producao *= 1 - (Math.random() * 0.5);
 
+			if (maq.velocidade_producao < 1)
+				maq.velocidade_producao = 1;
 		}, this.velocidade_producao * 1000, this);
 	}
 
@@ -82,16 +84,18 @@ var Maquina = function (nome, status, velocidade_producao) {
 	setInterval(function (maq) {
 		if (evento_inicio !== null) {
 			if (maq.GetStatusInt() == 0)
-				this.tempo_parado += Date.now() - evento_inicio;
+				maq.tempo_parado += Date.now() - evento_inicio;
 			else if (maq.GetStatusInt() == 1)
-				this.tempo_produzindo += Date.now() - evento_inicio;
+				maq.tempo_produzindo += Date.now() - evento_inicio;
+
+			evento_inicio = Date.now();
 		}
 	}, 1000, this);
 }
 
 function FormatarTempo (ms, includeMS) {
-	var anos = Math.floor(ms / 946080000000);
-	ms -= anos * 946080000000;
+	var anos = Math.floor(ms / 31104000000);
+	ms -= anos * 31104000000;
 
 	var meses = Math.floor(ms / 2592000000);
 	ms -= meses * 2592000000;
@@ -119,15 +123,17 @@ function FormatarTempo (ms, includeMS) {
 		result += dias.toString() + (dias > 1 ? " dias " : " dia ");
 
 	if (horas > 0 || dias > 0 || meses > 0 || anos > 0)
-		result += horas.toString() + " hr ";
+		result += horas.toString() + (horas > 1 ? " horas " : " hora ");
 
 	if (minutos > 0 || horas > 0 || dias > 0 || meses > 0 || anos > 0)
-		result += minutos.toString() + "min ";
+		result += minutos.toString() + (minutos > 1 ? " minutos " : " minuto ");
 
-	result += segundos.toString() + "sec";
+	result += segundos.toString() + (segundos > 1 ? " segundos" : " segundo");
 	
 	if (includeMS)
 		result += " " + ms.toString() + "ms"
 
 	return result;
 }
+
+var maquinas_global = [];

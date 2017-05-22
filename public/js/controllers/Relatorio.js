@@ -4,4 +4,5 @@
 
 app.controller('Relatorio', ['$scope', function ($scope) {
 	$scope.title = "Relatório das Máquinas";
+	$scope.maquinas = maquinas_global;
 }]);

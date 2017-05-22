@@ -2,8 +2,27 @@ version: '2'
 services:
   web:
     build: .
-    command: node server.js
+    command: sh -c "npm install && node server.js"
     volumes:
       - .:/usr/app/
     ports:
       - "3000:3000"
+    links:
+      - db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=production
+      - POSTGRES_HOST=db
+      - AMBIENTE=DESENV
+    depends_on:
+      - db
+    container_name: web
+
+  db:
+    build: postgres/.
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    container_name: db
