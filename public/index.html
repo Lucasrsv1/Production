@@ -3,21 +3,54 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Cadastro de Máquinas | Learning</title>
-
-		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-		<link type="text/css" rel="stylesheet" href="css/default.css"/>
+		
+		<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+		<link type="text/css" rel="stylesheet" href="vendors/fontawesome/css/font-awesome.min.css" />
+		<link type="text/css" rel="stylesheet" href="css/default.css" />
+		
+		<!-- JS Libraries -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
 	</head>
-	<body>
-	<h1 class="header">Cadastrar Novas Máquinas</h1>
-	<ul class="menu">
-		<li>Relatórios</li>
-		<li>Cadastrar Máquinas</li>
-	</ul>
-	<div align="center" class="page">
-		<div class="content">
-
+	<body ng-app="AppProduction">
+		<h1 class="header">Cadastrar Novas Máquinas</h1>
+		<ul class="menu" ng-controller="Menu">
+			<li class="{{ relatorio_class }}"><a href="#!/relatorio" ng-click="Refresh()">Relatórios</a></li>
+			<li class="{{ cadastrar_class }}"><a href="#!/cadastrar" ng-click="Refresh()">Cadastrar Máquinas</a></li>
+		</ul>
+		<div class="page">
+			<div ng-view></div>
 		</div>
-	</div>
-	<script type="text/javascript" src="js/Maquina.js"></script>
+		
+		<!-- Objects -->
+		<script type="text/javascript" src="js/Maquina.js"></script>
+		
+		<!-- Modules -->
+		<script type="text/javascript" src="js/App.js"></script>
+		
+		<!-- Controllers -->
+		<script type="text/javascript" src="js/controllers/Cadastro.js"></script>
+		<script type="text/javascript" src="js/controllers/Relatorio.js"></script>
+		
+		<!-- Others -->
+		<script type="text/javascript">
+			function ChangeStatus (button) {
+				var status = button.form.status;
+				if (status.value == 0) {
+					button.value = "Produzindo";
+					button.className = "status_btn_on";
+					status.value = 1;
+				} else {
+					button.value = "Parado";
+					button.className = "status_btn_off";
+					status.value = 0;
+				}
+			}
+		</script>
+		
+		<div class="footer">
+			<img src="images/LRV.png" />
+			<span>Desenvolvido por<br />Lucas Rassilan Vilanova.</span>
+		</div>
 	</body>
 </html>

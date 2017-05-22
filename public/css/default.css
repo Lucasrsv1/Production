@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #CCC;
+    background-color: #EAEAEA;
     font-family: 'Roboto';
     margin: 0;
     padding: 0;
@@ -13,16 +13,34 @@ body {
 	margin-left: 10%;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	margin: 0;
+.header {
+	padding: 30px 40px;
 }
 
-.header {
+.header, .footer {
     background-color: #5B79CC;
     font-family: 'Sansation';
     color: aliceblue;
-    padding: 30px 40px;
     margin: 0;
+}
+
+.footer {
+	padding: 10px 30px;
+}
+
+.footer img {
+	height: 110px;
+}
+
+.footer span {
+	float: right;
+	font-size: 18px;
+	margin-top: 34px;
+	text-align: center;
+}
+a {
+	text-decoration: none;
+	color: inherit;
 }
 
 .menu {
@@ -51,12 +69,141 @@ h1, h2, h3, h4, h5, h6 {
     border-left: 1px solid #CCC;
 }
 
+.menu .selected {
+	background-color: rgba(255, 255, 255, 0.13) !important;
+	cursor: default !important;
+}
+
 .page {
-	background-color: #EEE;
-	padding: 20px 0;
+	background-color: #FBFBFB;
+	padding: 20px 40px;
 }
 
 .content {
-	width: 95%;
-	min-height: 500px;
+	min-height: 500px;;
+}
+
+h2 {
+	margin-top: 0;
+}
+
+form label {
+	font-size: 20px;
+}
+
+form input {
+	font-family: 'Roboto';
+	margin-bottom: 10px;
+	margin-left: 5px;
+	padding: 3px;
+	font-size: 16px;
+}
+
+.status_btn_on, .status_btn_off, .default_btn, .Produzindo, .Parado {
+	width: 115px;
+	padding: 4px 0;
+	color: #FBFBFB;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.status_btn_on:hover, .status_btn_off:hover, .default_btn:hover, .i:hover {
+	cursor: pointer;
+}
+
+.default_btn {
+	margin-left: 0;
+	border: 1px solid #5b79cc;
+	background-color: #6495ed;
+}
+
+.default_btn:hover {
+	border-color: #4b69bc;
+	background-color: #5485dd;
+}
+
+.default_btn:active {
+	border-color: #3b59ac;
+	background-color: #4475cd;
+}
+
+.status_btn_on, .Produzindo {
+	border: 1px solid #388030;
+	background-color: #65b25c;
+}
+
+.status_btn_on:hover {
+	border-color: #287020;
+	background-color: #55a24c;
+}
+
+.status_btn_on:active {
+	border-color: #186010;
+	background-color: #45923c;
+}
+
+.status_btn_off, .Parado {
+	border: 1px solid #bf655b;
+	background-color: #e06456;
+}
+
+.status_btn_off:hover {
+	border-color: #af554b;
+	background-color: #d05446;
+}
+
+.status_btn_off:active {
+	border-color: #9f453b;
+	background-color: #c04436;
+}
+
+.separator {
+	width: 100%;
+	margin: 20px 0;
+	border-top: 1px solid #AAA;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table, th, td {
+	border: 1px solid black !important;
+}
+
+th, td {
+	padding: 6px 12px !important;
+}
+
+th {
+	font-size: 20px;
+}
+
+td {
+	font-size: 18px !important;
+}
+
+.fa-remove {
+	color: #e06456;
+	margin-right: 5px;
+}
+
+.fa-remove:hover {
+	color: #d05446;
+}
+
+.fa-remove:active {
+	color: #c04436;
+}
+
+.fa-edit {
+	color: #6495ed;
+}
+
+.fa-edit:hover {
+	color: #5485dd;
+}
+
+.fa-edit:active {
+	color: #4475cd;
 }

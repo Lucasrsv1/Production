@@ -2,23 +2,26 @@
  * Created by tcs on 19/05/17.
  */
 
-/*  TODO: adicionar status atual e incluir a duração no tempo.
+/*
  *	Learn: https://www.codeschool.com/courses/try-docker
  */
 
-var Maquina = function (velocidade_producao) {
+var Maquina = function (nome, status, velocidade_producao) {
+	var status; // 0: parado, 1: produzindo.
 	var evento_inicio = null;
 	var velocidade_padrao = velocidade_producao;
-
+	
 	this.pecas_produzidas = 0;
 	this.refugo = 0;
-	this.velocidade_producao = velocidade_producao; // 1 peça a cada X segundos.
 
 	this.tempo_produzindo = 0;
 	this.tempo_parado = 0;
 
 	this.produzindo_interval = 0;
 	this.parado_interval = 0;
+	
+	this.velocidade_producao = velocidade_producao; // 1 peça a cada X segundos.
+	this.nome = nome;
 
 	this.Produzir = function () {
 		clearInterval(this.parado_interval);
@@ -28,6 +31,7 @@ var Maquina = function (velocidade_producao) {
 			this.tempo_parado += Date.now() - evento_inicio;
 
 		evento_inicio = Date.now();
+		status = 1;
 		this.produzindo_interval = setInterval(function (maq) {
 			maq.pecas_produzidas++;
 
@@ -36,10 +40,10 @@ var Maquina = function (velocidade_producao) {
 
 			if (random < 0.175)
 				maq.Parar();
+			else if (random < 0.25)
+				maq.velocidade_producao *= 1 + (Math.random() * 0.5);
 			else if (random < 0.325)
-				maq.velocidade_producao *= 1 + Math.random();
-			else if (random < 0.475)
-				maq.velocidade_producao *= -1 - Math.random();
+				maq.velocidade_producao *= 1 - (Math.random() * 0.5);
 
 		}, this.velocidade_producao * 1000, this);
 	}
@@ -51,15 +55,38 @@ var Maquina = function (velocidade_producao) {
 			this.tempo_produzindo += Date.now() - evento_inicio;
 
 		evento_inicio = Date.now();
+		status = 0;
 		this.parado_interval = setInterval(function (maq) {
 			maq.refugo++;
 
 			// Mudar de status aleatoriamente para simular.
-			if (Math.random() < 0.4)
+			if (Math.random() < 0.425)
 				maq.Produzir();
 
 		}, this.velocidade_producao * 1000, this);
 	}
+	
+	this.GetStatusInt = function () {
+		return status;
+	}
+	
+	this.GetStatus = function () {
+		return status == 1 ? "Produzindo" : "Parado";
+	}
+	
+	if (status == 1)
+		this.Produzir();
+	else
+		this.Parar();
+	
+	setInterval(function (maq) {
+		if (evento_inicio !== null) {
+			if (maq.GetStatusInt() == 0)
+				this.tempo_parado += Date.now() - evento_inicio;
+			else if (maq.GetStatusInt() == 1)
+				this.tempo_produzindo += Date.now() - evento_inicio;
+		}
+	}, 1000, this);
 }
 
 function FormatarTempo (ms, includeMS) {

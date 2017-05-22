@@ -1,0 +1,45 @@
+<div class="content" ng-controller="Cadastro">
+	<h2>{{ title }}</h2>
+	<form name="cadastro_form" ng-submit="SubmitMaquina()">
+		<label>Nome ou Identificador:</label>
+		<input type="text" ng-model="nome" name="nome" placeholder="Nome ou ID" style="width: 260px;"/> <br />
+		
+		<label>Velocidade de produção padrão:</label>
+		<input type="number" ng-model="velocidade_producao" name="velocidade_producao" placeholder="segundos/peça" step="0.01" /> <br />
+		
+		<label>Status Atual:</label>
+		<input type="button" name="status_btn" value="Produzindo" class="status_btn_on" onclick="ChangeStatus(this);"/>
+		<input type="hidden" name="status" value="1" /> <br />
+		
+		<input type="submit" value="{{ submit_btn }}" class="default_btn" />
+	</form>
+	
+	<div class="separator"></div>
+	
+	<h2 style="text-align: center;">Máquinas Cadastradas</h2>
+	<table align="center">
+		<thead>
+			<tr>
+				<th>Nome</th>
+				<th>Velocidade Atual</th>
+				<th>Status Atual</th>
+				<th>Peças Produzidas</th>
+				<th>Refugo</th>
+				<th>Ação</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="maq in maquinas">
+				<td>{{ maq.nome }}</td>
+				<td>{{ maq.velocidade_producao | number:2 }} segundo(s) por peça</td>
+				<td class="{{ maq.GetStatus() }}">{{ maq.GetStatus() }}</td>
+				<td>{{ maq.pecas_produzidas | number }}</td>
+				<td>{{ maq.refugo | number }}</td>
+				<td align="center">
+					<i class="fa fa-remove" ng-click="RemoverMaquina($index)"></i>
+					<i class="fa fa-edit" ng-click="EditarMaquina($index)"></i>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
