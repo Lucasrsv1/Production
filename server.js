@@ -3,32 +3,116 @@
  * Learn: http://mherman.org/blog/2015/02/12/postgresql-and-nodejs/#.WSMctnXyvCI
  */
 
-var http = require('http');
-var url = require('url');
-var fs = require('fs');
-var path = require('path');
-var pg = require('pg');
+const http = require('http');
+const url = require('url');
+const fs = require('fs');
+const path = require('path');
+const pg = require('pg');
+const Sequelize = require('sequelize');
 
-var client = new pg.Client({
+var sequelize; // Instance
+var maquina; // Table maquina
+
+var dbSetup = new pg.Client({
 	user: "postgres",
 	password: "",
-	//1database: "production",
 	host: "db",
 	port: 5432
 });
-client.connect();
 
-var query = client.query("SELECT datname FROM pg_database WHERE datistemplate = false;");
-query.on('end', function () {
-	console.log("Query end [OK]");
-	client.end();
+dbSetup.connect(function (error) {
+	if (error) {
+		console.log("Couldn't connect to postgres [X]");
+		return;
+	}
+
+	console.log("Connected to postgres [OK]");
+
+	var query = dbSetup.query("SELECT COUNT(*) FROM pg_database WHERE datname = 'production'");
+	query.on('row', function (row) {
+		if (row.count == 0) {
+			console.log("Database production doesn't exist [!]");
+
+			var creationQuery = dbSetup.query("CREATE DATABASE production");
+			creationQuery.on('end', function () {
+				console.log("Database production created [OK]");
+				dbSetup.end();
+				console.log("Connection closed [OK]");
+				ConnectToProduction();
+			});
+		} else {
+			console.log("Setup for database production completed [OK]");
+			query.on('end', function () {
+				dbSetup.end();
+				console.log("Connection closed [OK]");
+			});
+			ConnectToProduction();
+		}
+	});
 });
 
-/*var query = client.query("CREATE TABLE IF NOT EXISTS maquinas (id int PRIMARY_KEY, nome VARCHAR(100) NOT NULL, pecas_produzidas int NOT NULL DEFAULT 0, refugo int NOT NULL DEFAULT 0, tempo_produzindo bigint NOT NULL DEFAULT 0, tempo_parado bigint NOT NULL DEFAULT 0, velocidade_producao DECIMAL(10,2) NOT NULL DEFAULT 10)");
-query.on('end', function () {
-	console.log("Query end [OK]");
-	client.end();
-});*/
+function ConnectToProduction () {
+	sequelize = new Sequelize("production", "postgres", "", {
+		host: process.env.POSTGRES_HOST,
+		dialect: 'postgres',
+		pool: {
+			max: 5,
+			min: 0,
+			idle: 10000
+		}
+	});
+
+	sequelize.authenticate().then(function () {
+		console.log("Connected to postgres [OK]");
+
+		// Define o escopo da tabela maquina
+		maquina = sequelize.define("maquina", {
+			id: {
+				type: Sequelize.INTEGER,
+				primaryKey: true,
+				autoIncrement: true
+			},
+			nome: {
+				type: Sequelize.STRING,
+				allowNull: false,
+				defaultValue: ""
+			},
+			pecas_produzidas: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				defaultValue: 0
+			},
+			refugo: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				defaultValue: 0
+			},
+			tempo_produzindo: {
+				type: Sequelize.BIGINT,
+				allowNull: false,
+				defaultValue: 0
+			},
+			tempo_parado: {
+				type: Sequelize.BIGINT,
+				allowNull: false,
+				defaultValue: 0
+			},
+			velocidade_producao: {
+				type: Sequelize.DECIMAL(10, 4),
+				allowNull: false,
+				defaultValue: 0
+			}
+		});
+
+		// CREATE TABLE IF NOT EXISTS maquinas
+		maquina.sync({ force: false }).then(function () {
+			console.log("Table maquinas exists [OK]");
+		});
+	}).catch(function (error) {
+		console.log("Couldn't connect to postgres [X]");
+		console.log(error);
+	});
+}
 
 var contentTypes = {
     'html': 'text/html',

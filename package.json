@@ -16,6 +16,7 @@
   },
   "private": false,
   "dependencies": {
+    "sequelize": "3.30.4",
     "pg": "^6.1.0"
   },
   "devDependencies": {}

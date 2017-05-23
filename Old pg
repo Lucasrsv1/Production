@@ -1,0 +1,75 @@
+var dbSetup = new pg.Client({
+	user: "postgres",
+	password: "",
+	host: "db",
+	port: 5432
+});
+
+dbSetup.connect(function (error) {
+	if (error) {
+		console.log("Couldn't connect to postgres [X]");
+		return;
+	}
+
+	//dbSetup.query("DROP DATABASE production");
+
+	console.log("Connected to postgres [OK]");
+
+	var query = dbSetup.query("SELECT COUNT(*) FROM pg_database WHERE datname = 'production'");
+	query.on('row', function (row) {
+		if (row.count == 0) {
+			console.log("Database production doesn't exist [!]");
+
+			var creationQuery = dbSetup.query("CREATE DATABASE production");
+			creationQuery.on('end', function () {
+				console.log("Database production created [OK]");
+				dbSetup.end();
+				console.log("Connection closed [OK]");
+				ConnectToProduction();
+			});
+		} else {
+			console.log("Setup for database production completed [OK]");
+			query.on('end', function () {
+				dbSetup.end();
+				console.log("Connection closed [OK]");
+			});
+			ConnectToProduction();
+		}
+	});
+});
+
+function ConnectToProduction () {
+	var client = new pg.Client({
+		user: "postgres",
+		password: "",
+		database: "production",
+		host: "db",
+		port: 5432
+	});
+
+	client.connect(function (error) {
+		if (error) {
+			console.log("Couldn't connect to postgres or use database production [X]");
+			console.log(error);
+			return;
+		}
+
+		console.log("Connected to postgres [OK]");
+		console.log("Using database production [OK]");
+
+		var query = client.query("CREATE TABLE IF NOT EXISTS maquinas (id SERIAL PRIMARY KEY, nome VARCHAR(100) NOT NULL DEFAULT '', pecas_produzidas int NOT NULL DEFAULT 0, refugo int NOT NULL DEFAULT 0, tempo_produzindo bigint NOT NULL DEFAULT 0, tempo_parado bigint NOT NULL DEFAULT 0, velocidade_producao DECIMAL(10,2) NOT NULL DEFAULT 10)");
+		query.on('end', function () {
+			var checkTable = client.query("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'maquinas'");
+			checkTable.on('row', function (row) {
+				if (row.count == 1)
+					console.log("Table maquinas exists [OK]");
+				else
+					console.log("Couldn't create table maquinas [X]");
+			});
+
+			checkTable.on('end', function () {
+				client.end();
+			});
+		});
+	});
+}
